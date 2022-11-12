@@ -1,0 +1,120 @@
+---
+title: "PROJECT IMDB ANALYSIS. DANA"
+author: "Yamileth Hercules"
+date: "2022-11-12"
+output: pdf_document
+---
+#1 Reading the table and see the first columns
+
+```{r }
+imdb_ds <-read.csv('../data/imdb_top_1000.csv', header = TRUE,  na.string = c(""))
+head(imdb_ds)
+```
+# Looking the dimensions of the table
+```{r}
+dim(imdb_ds)
+```
+
+
+# Looking the data type
+```{r}
+str(imdb_ds)
+```
+
+# Subsetting the variables.
+
+```{r}
+subset_imdb <- imdb_ds[, -c(1,8,9,11,12,13,14)]
+subset_imdb 
+```
+# Looking the dimesions of my subset of data set 
+```{r}
+
+dim(subset_imdb)
+```
+
+# Looking the variables with missing values 
+
+```{r}
+
+sum(is.na(subset_imdb))
+summary(subset_imdb)
+```
+
+# Observing the data carefully
+
+There is an error in the the column Released Year in the dataset and it is going to be replace with the value with more frecuency
+
+```{r}
+
+unique(subset_imdb$Released_Year)
+
+```
+
+
+```{r}
+subset_imdb$Released_Year[subset_imdb$Released_Year == 'PG'] <- '1995'
+unique(subset_imdb$Released_Year)
+View(subset_imdb)
+```
+
+# How many movies are made per year (ranges) in the top 1000 IMDB? 
+
+#Making the year as numerical variable
+
+```{r}
+
+Realesed_year_variable <- strtoi(subset_imdb$Released_Year)
+
+```
+
+
+generating the frecuency table for the variable
+```{r}
+
+min<- min(subset_imdb$Released_Year)
+max<- max(subset_imdb$Released_Year)
+ry_table <- table(cut(Realesed_year_variable, breaks = seq(min, max, by =9)))
+ry_table
+
+
+```
+
+
+```{r}
+
+barplot(ry_table, ylab = "Frequency", xlab = 'Released Year in ranges', main = "MOVIES PER YEAR", col='steelblue')
+?barplot
+```
+
+Taking the variable as a numerical variable and generating a Histogram 
+```{r}
+histo <- hist(Realesed_year_variable, breaks = 30, col='steelblue', xlab = 'Released Year', main = "MOVIES PER YEAR")
+?hist
+```
+# Conclusion:
+
+The distribution has negative skewness. The graph shows that there is an upward trend in the list of the best 1000 movies. Since the year 2000 the number has increased to more than 100 films in the mentioned list.  
+
+```{r}
+boxplot(Realesed_year_variable, horizontal=TRUE, col='steelblue')
+?boxplot
+```
+
+#Conclusion:
+The boxplot clearly shows that the distribution is skewed to the left. The mean is approximately close to the year 2000. It also shows some extreme values before the minimum percentile.
+
+
+```{r}
+ library(dplyr)
+
+director_table <- table(subset_imdb$Director)
+director_table <-tail(sort(director_table),10)
+director_table
+
+```
+
+```{r}
+barplot(director_table, ylab = "Frequency", xlab = 'Director most Prolific', main = 'Director', col=c('steelblue','yellow', 'orange','green', 'beige', 'violet','brown','pink', 'red','gray'), legend.text = rownames(director_table))
+
+```
