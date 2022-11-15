@@ -128,9 +128,13 @@ barplot(director_table, ylab = "Frequency", xlab = 'Director most Prolific', mai
 ## Correlation analysis:
 
 ```{r}
-plot(subset_imdb$No_of_Votes, subset_imdb$IMDB_Rating, xlab = 'No of votes', ylab = 'IMDB Rating')
+plot(subset_imdb$No_of_Votes, subset_imdb$IMDB_Rating, xlab = 'Number of votes', ylab = 'IMDB Rating')
 fit = lm(subset_imdb$IMDB_Rating ~ subset_imdb$No_of_Votes)
 abline(fit)
+```
+
+```{r}
+summary(subset_imdb$IMDB_Rating)
 ```
 
 
