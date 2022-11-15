@@ -114,7 +114,79 @@ director_table
 
 ```
 
+
 ```{r}
 barplot(director_table, ylab = "Frequency", xlab = 'Director most Prolific', main = 'Director', col=c('steelblue','yellow', 'orange','green', 'beige', 'violet','brown','pink', 'red','gray'), legend.text = rownames(director_table))
 
 ```
+
+
+---> Bivariate statements:
+
+- What is the correlation between votes and IMDB rating? (Numerical variables: Number_of_votes and IMDB rating)
+
+## Correlation analysis:
+
+```{r}
+plot(subset_imdb$No_of_Votes, subset_imdb$IMDB_Rating, xlab = 'Number of votes', ylab = 'IMDB Rating')
+fit = lm(subset_imdb$IMDB_Rating ~ subset_imdb$No_of_Votes)
+abline(fit)
+```
+
+```{r}
+summary(subset_imdb$IMDB_Rating)
+```
+
+
+```{r}
+cor(subset_imdb$No_of_Votes, subset_imdb$IMDB_Rating)
+```
+
+CONCLUSION: There is a positive low correlation between the variables, there are some outliers.
+ 
+ 
+---> Test for the significance correlation to verify if this correlation applies to the population or just to the sample:
+
+- Null hypothesis: The number of votes and the IMDB rating do not have linear correlation among all subjects in the population
+- Alternative hypothesis: The number of votes and the IMDB rating have linear correlation among all subjects in the population
+
+n = 1000
+r = 0.4949
+DP < 0.139
+
+In this case r > DP, therefore, the x and y variable have positive linear relation among all subjects in the population so we have enough statistical evidence to reject the null hypothesis.
+
+## Regression analysis:
+
+```{r}
+summary(fit)
+```
+
+Formula: y = mx + b
+           = 4.164(x)+7.835
+
+## Verify: Intercept -> When one movie does not have audience votes, the intercept does not have meaning because the IMDB rating depends on the number of votes.
+## verify: Slope -> When the number of votes varies X units, the movie is going to change 4.16 unites in the IMDB Rating.
+
+## Validate the adequacy of the linear fit:
+
+1. Linearity and Homoscedasticity conditions:
+
+```{r}
+plot(subset_imdb$No_of_Votes, fit$residuals, xlab = 'No of votes', ylab = 'Residuals')
+abline(h = c(-0.4, 0, 0.6), col= c('blue', 'red', 'blue'), lty= c(2, 1, 2), lwd= c(3, 2, 3))
+abline(h=0)
+```
+
+
+### Verify: We consider that the linear and homoscedaticity conditions are valid because the values are distribuited in the plot and they do not show any pattern.
+
+2. Normal condition:
+
+```{r}
+hist(fit$residuals, xlab = 'Residuals')
+```
+
+## Verify: The normal condition is valid because the residuals follow a Normal Distribution despite being slightly skewed to the right.
+
+
