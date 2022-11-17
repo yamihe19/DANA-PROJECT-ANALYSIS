@@ -65,7 +65,6 @@ View(subset_imdb)
 ```{r}
 
 Realesed_year_variable <- strtoi(subset_imdb$Released_Year)
-
 ```
 
 
@@ -74,16 +73,20 @@ generating the frecuency table for the variable
 
 min<- min(subset_imdb$Released_Year)
 max<- max(subset_imdb$Released_Year)
-ry_table <- table(cut(Realesed_year_variable, breaks = seq(min, max, by =9)))
-ry_table
+ry_table <-table(cut(Realesed_year_variable, breaks = seq(min, max, by =8)))
 
+total<- sum(ry_table)
+
+ryear_pct<-round((ry_table/total*100),2)
+
+cbind(Frecuency= ry_table, Percentage =ryear_pct)
 
 ```
 
 
 ```{r}
 
-barplot(ry_table, ylab = "Frequency", xlab = 'Released Year in ranges', main = "MOVIES PER YEAR", col='steelblue')
+barplot(ry_table, ylab = "Frequency", xlab = 'Released Year in Ranges', main = "MOVIES PER YEAR", col= heat.colors(8), legend.text = rownames(ry_table),xlim= c(0, 20))
 ?barplot
 ```
 
