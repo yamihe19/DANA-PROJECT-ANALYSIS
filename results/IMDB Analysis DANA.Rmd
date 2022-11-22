@@ -130,7 +130,7 @@ barplot(director_table, ylab = "Frequency", xlab = 'Director most Prolific', mai
 ```{r}
 plot(subset_imdb$No_of_Votes, subset_imdb$IMDB_Rating, xlab = 'Number of votes', ylab = 'IMDB Rating')
 fit = lm(subset_imdb$IMDB_Rating ~ subset_imdb$No_of_Votes)
-abline(fit)
+abline(fit, col = 'darkblue')
 ```
 
 ```{r}
@@ -166,19 +166,29 @@ Slope -> When the number of votes varies by 1, the IMDB rating is going to incre
 
 1. Linearity and Homoscedasticity conditions:
 
+
 ```{r}
-plot(subset_imdb$No_of_Votes, fit$residuals, xlab = 'No of votes', ylab = 'Residuals')
-abline(h = c(-0.4, 0, 0.6), col= c('blue', 'red', 'blue'), lty= c(2, 1, 2), lwd= c(3, 2, 3))
+library(MASS)
+
+residual <- resid(fit)
+movies.residual <- studres(fit)
+```
+
+
+
+```{r}
+plot(subset_imdb$No_of_Votes, movies.residual, xlab = 'No of votes', ylab = 'Residuals', main = 'Studentized residual plot')
+abline(h = c(-2, 0, 2), col= c('blue', 'red', 'blue'), lty= c(2, 1, 2), lwd= c(3, 2, 3))
 abline(h=0)
 ```
 
 
-We consider that the linear and homoscedasticity conditions are valid because the values are distribuited in the plot and they do not show any pattern.
+We consider that the linear and homoscedasticity conditions are valid because the values are distributed in the plot and they do not show any pattern.
 
 2. Normal condition:
 
 ```{r}
-hist(fit$residuals, xlab = 'Residuals')
+hist(movies.residual, xlab = 'Residuals', main = 'Histogram of Studentized Residual')
 ```
 
 The normal condition is valid because the residuals follow a Normal Distribution despite being slightly skewed to the right.
