@@ -105,16 +105,10 @@ abline(fit)
 ```
 
 ```{r}
-summary(subset_imdb$IMDB_Rating)
-```
-
-
-```{r}
 cor(subset_imdb$No_of_Votes, subset_imdb$IMDB_Rating)
 ```
 
-CONCLUSION: There is a positive low correlation between the variables, there are some outliers.
- 
+CONCLUSION: There is a positive moderate correlation between the variables, there are some outliers.
  
 ---> Test for the significance correlation to verify if this correlation applies to the population or just to the sample:
 
@@ -134,10 +128,10 @@ summary(fit)
 ```
 
 Formula: y = mx + b
-           = 4.164(x)+7.835
+           = 0.0000004165(x)+7.835
 
-## Verify: Intercept -> When one movie does not have audience votes, the intercept does not have meaning because the IMDB rating depends on the number of votes.
-## verify: Slope -> When the number of votes varies X units, the movie is going to change 4.16 unites in the IMDB Rating.
+Intercept -> When one movie does not have audience votes, the intercept does not have meaning because the IMDB rating depends on the number of votes.
+Slope -> When the number of votes varies by 1, the IMDB rating is going to increase 0.0000004165, in other words, one million votes are going to increase the IMDB rating by 0.41.
 
 ## Validate the adequacy of the linear fit:
 
@@ -150,7 +144,7 @@ abline(h=0)
 ```
 
 
-### Verify: We consider that the linear and homoscedaticity conditions are valid because the values are distribuited in the plot and they do not show any pattern.
+We consider that the linear and homoscedasticity conditions are valid because the values are distribuited in the plot and they do not show any pattern.
 
 2. Normal condition:
 
@@ -158,6 +152,6 @@ abline(h=0)
 hist(fit$residuals, xlab = 'Residuals')
 ```
 
-## Verify: The normal condition is valid because the residuals follow a Normal Distribution despite being slightly skewed to the right.
+The normal condition is valid because the residuals follow a Normal Distribution despite being slightly skewed to the right.
 
-
+FINAL CONCLUSION: The analysis allows us to see that in the top 1000 movies the IMDB rating increases when the number of votes increases.
