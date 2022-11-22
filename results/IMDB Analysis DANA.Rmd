@@ -135,8 +135,9 @@ Slope -> When the number of votes varies by 1, the IMDB rating is going to incre
 
 ## Validate the adequacy of the linear fit:
 
-1. Linearity and Homoscedasticity conditions:
+-->> Verify how reliable and valid is my linear ana
 
+1. Linearity and Homoscedasticity conditions:
 
 ```{r}
 library(MASS)
@@ -144,8 +145,6 @@ library(MASS)
 residual <- resid(fit)
 movies.residual <- studres(fit)
 ```
-
-
 
 ```{r}
 plot(subset_imdb$No_of_Votes, movies.residual, xlab = 'No of votes', ylab = 'Residuals', main = 'Studentized residual plot')
@@ -158,8 +157,13 @@ We consider that the linear and homoscedasticity conditions are valid because th
 
 2. Normal condition:
 
+
 ```{r}
-hist(movies.residual, xlab = 'Residuals', main = 'Histogram of Studentized Residual')
+pal2 <- colorRampPalette(colors = c("yellow", "blue", 'lightblue'))(14)
+```
+
+```{r}
+hist(movies.residual, xlab = 'Residuals', main = 'Histogram of Studentized Residual', col = pal2)
 ```
 
 The normal condition is valid because the residuals follow a Normal Distribution despite being slightly skewed to the right.
