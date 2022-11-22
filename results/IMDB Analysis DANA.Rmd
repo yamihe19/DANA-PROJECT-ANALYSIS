@@ -135,7 +135,7 @@ Slope -> When the number of votes varies by 1, the IMDB rating is going to incre
 
 ## Validate the adequacy of the linear fit:
 
--->> Verify how reliable and valid is my linear ana
+-->> Verify how reliable and valid is my linear analysis
 
 1. Linearity and Homoscedasticity conditions:
 
