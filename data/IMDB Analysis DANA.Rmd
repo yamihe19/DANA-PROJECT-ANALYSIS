@@ -1,0 +1,157 @@
+---
+title: "PROJECT IMDB ANALYSIS. DANA"
+author: "Team 4"
+date: "2022-11-12"
+output: pdf_document
+---
+#1 Reading the table and see the first columns
+
+```{r }
+imdb_ds <-read.csv('../data/imdb_top_1000.csv', header = TRUE,  na.string = c(""))
+head(imdb_ds)
+```
+# Looking the dimensions of the table
+```{r}
+dim(imdb_ds)
+summary(imdb_ds)
+```
+
+
+# Looking the data type
+```{r}
+str(imdb_ds)
+```
+
+# Subsetting the variables.
+
+```{r}
+subset_imdb <- imdb_ds[, -c(1,8,9,11,12,13,14)]
+subset_imdb
+```
+# Looking the dimensions of my subset of data set 
+```{r}
+
+dim(subset_imdb)
+```
+
+# Looking the variables with missing values 
+
+```{r}
+sum(is.na(subset_imdb))
+summary(subset_imdb)
+```
+
+# Observing the data carefully
+
+There is an error in the the column Released Year in the dataset and it is going to be replace with the value with more frecuency
+
+```{r}
+unique(subset_imdb$Released_Year)
+```
+
+
+```{r}
+subset_imdb$Released_Year[subset_imdb$Released_Year == 'PG'] <- '1995'
+unique(subset_imdb$Released_Year)
+View(subset_imdb)
+```
+
+# How many movies are made per year (ranges) in the top 1000 IMDB? 
+
+#Making the year as numerical variable
+
+```{r}
+Realesed_year_variable <- strtoi(subset_imdb$Released_Year)
+```
+
+
+#Generating the frecuency table for the variable
+```{r}
+min<- min(subset_imdb$Released_Year)
+max<- max(subset_imdb$Released_Year)
+ry_table <-table(cut(Realesed_year_variable, breaks = seq(min, max, by =8)))
+
+total<- sum(ry_table)
+
+ryear_pct<-round((ry_table/total*100),2)
+
+cbind(Frequency= ry_table, Percentage =ryear_pct)
+```
+
+```{r}
+pal <- colorRampPalette(colors = c("lightblue", "blue", 'yellow'))(12)
+```
+
+
+```{r}
+barplot(ry_table, ylab = "Frequency", xlab = 'Released Year in Ranges', main = "MOVIES PER YEAR", col= pal, legend.text = rownames(ry_table),xlim= c(0, 22))
+?barplot
+```
+
+#Conclusion:
+The barplot clearly shows that the proportion of movies are higher in the right side. There are more than 100 movies in the 3 latest ranges.The tendecy is  to increase the latest movies in the IMDB rating 
+
+
+---> Bivariate statements:
+
+- What is the correlation between votes and IMDB rating? (Numerical variables: Number_of_votes and IMDB rating)
+
+## Correlation analysis:
+
+```{r}
+plot(subset_imdb$No_of_Votes, subset_imdb$IMDB_Rating, xlab = 'Number of votes', ylab = 'IMDB Rating')
+fit = lm(subset_imdb$IMDB_Rating ~ subset_imdb$No_of_Votes)
+abline(fit)
+```
+
+```{r}
+cor(subset_imdb$No_of_Votes, subset_imdb$IMDB_Rating)
+```
+
+CONCLUSION: There is a positive moderate correlation between the variables, there are some outliers.
+ 
+---> Test for the significance correlation to verify if this correlation applies to the population or just to the sample:
+
+- Null hypothesis: The number of votes and the IMDB rating do not have linear correlation among all subjects in the population
+- Alternative hypothesis: The number of votes and the IMDB rating have linear correlation among all subjects in the population
+
+n = 1000
+r = 0.4949
+DP < 0.139
+
+In this case r > DP, therefore, the x and y variable have positive linear relation among all subjects in the population so we have enough statistical evidence to reject the null hypothesis.
+
+## Regression analysis:
+
+```{r}
+summary(fit)
+```
+
+Formula: y = mx + b
+           = 0.0000004165(x)+7.835
+
+Intercept -> When one movie does not have audience votes, the intercept does not have meaning because the IMDB rating depends on the number of votes.
+Slope -> When the number of votes varies by 1, the IMDB rating is going to increase 0.0000004165, in other words, one million votes are going to increase the IMDB rating by 0.41.
+
+## Validate the adequacy of the linear fit:
+
+1. Linearity and Homoscedasticity conditions:
+
+```{r}
+plot(subset_imdb$No_of_Votes, fit$residuals, xlab = 'No of votes', ylab = 'Residuals')
+abline(h = c(-0.4, 0, 0.6), col= c('blue', 'red', 'blue'), lty= c(2, 1, 2), lwd= c(3, 2, 3))
+abline(h=0)
+```
+
+
+We consider that the linear and homoscedasticity conditions are valid because the values are distribuited in the plot and they do not show any pattern.
+
+2. Normal condition:
+
+```{r}
+hist(fit$residuals, xlab = 'Residuals')
+```
+
+The normal condition is valid because the residuals follow a Normal Distribution despite being slightly skewed to the right.
+
+FINAL CONCLUSION: The analysis allows us to see that in the top 1000 movies the IMDB rating increases when the number of votes increases.
